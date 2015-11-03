@@ -39,3 +39,28 @@ dec9
 
 dec9
 (if (= (mapset inc [1 1 2 2]) #{2 3}) "Test passes" "Test fails")
+
+
+;;;;ex5
+(def asym-alien-parts [{:name "head" :size 3}
+                  {:name "radial-eye" :size 1}
+                  {:name "radial-tenicle" :size 1}])
+
+
+(defn radial-part
+  [part nums]
+  {:name (clojure.string/replace (:name part) #"^radial-" (str "radial-" nums "-"))
+   :size (:size part)})
+
+
+(if (= (radial-part {:name "radial-eye" :size 1} 2) {:name "radial-2-eye" :size 1}) "Test passes" "Test fails")
+
+(defn better-symmetrize-body-parts
+  "Expects a seq of maps that have a :name and :size"
+  [asym-body-parts]
+  (reduce (fn [final-body-parts part]
+            (into final-body-parts (set [part (matching-part part)])))
+          []
+          asym-body-parts))
+
+(better-symmetrize-body-parts asym-hobbit-body-parts)
